@@ -2,16 +2,17 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
-    <title>New Customer</title>
+    <title>Edit Customer</title>
 </head>
 
 <body>
 <div class="container-fluid" align="center">
-    <h1>Create New Customer</h1>
+    <h1>Edit customer </h1>
     <br />
-    <form action="#" th:action="@{/Customer/save}" th:object="${Customer}" method="post">
+    <form action="#" th:action="@{/Customer/edit/{id}(id=${customer.id})}" th:object="${customer}" method="post">
 
-        <table border="0" cellpadding="10">
+
+    <table border="0" cellpadding="10">
             <tr>
                 <td>Customer ID:</td>
                 <td><input type="text" th:field="*{id}" required /></td>

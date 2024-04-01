@@ -3,35 +3,29 @@ package com.example.demo.Model;
 import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
-import com.example.demo.Model.Order;
-
 
 @Entity
-@Table(name = "Customer")
-public class Customer {
-
+@Table(name = "Product")
+public class Product {
 
     @Id
     //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     private String name;
-    private String address;
-    private String telephone;
+    private String supplier;
+    private Long price;
 
-
-
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "product")
     private Set<Order> orders = new HashSet<>();
 
-
-
-    public Customer() {
+    public Product() {
     }
 
-    public Customer(String name) {
+    public Product(String name, String supplier, Long price) {
         this.name = name;
+        this.supplier = supplier;
+        this.price = price;
     }
 
     public Long getId() {
@@ -49,21 +43,22 @@ public class Customer {
     public void setName(String name) {
         this.name = name;
     }
-    public String getAddress() {
-        return address;
+
+    public String getSupplier() {
+        return supplier;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-    public String getTelephone() {
-        return telephone;
+    public void setSupplier(String supplier) {
+        this.supplier = supplier;
     }
 
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
+    public Long getPrice() {
+        return price;
     }
 
+    public void setPrice(Long price) {
+        this.price = price;
+    }
 
     public Set<Order> getOrders() {
         return orders;
