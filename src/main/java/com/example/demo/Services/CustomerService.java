@@ -29,4 +29,25 @@ public class CustomerService {
        }
        throw new CustomerNotFoundException("Could not find any customer with ID " + id);
     }
+    public void updateCustomer(Long id, Customer customer) throws CustomerNotFoundException {
+        Optional<Customer> optionalCustomer = crepo.findById(id);
+        if (optionalCustomer.isPresent()) {
+            Customer existingCustomer = optionalCustomer.get();
+            existingCustomer.setName(customer.getName());
+            existingCustomer.setAddress(customer.getAddress());
+            existingCustomer.setTelephone(customer.getTelephone());
+            crepo.save(existingCustomer);
+        } else {
+            throw new CustomerNotFoundException("Could not find any customer with ID " + id);
+        }
+    }
+    public void delete(Long id) throws CustomerNotFoundException {
+        Long count=crepo.countById(id);
+        if (count==null||count==0){
+            throw new CustomerNotFoundException("Could not find any user with ID " +id);
+
+        }
+        crepo.deleteById(id);
+
+    }
 }
