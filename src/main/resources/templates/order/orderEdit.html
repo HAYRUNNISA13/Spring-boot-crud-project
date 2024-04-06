@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Order</title>
+</head>
+<body>
+<div>
+    <h1>Edit Order</h1>
+    <form th:action="@{/orders/update/{id}(id=${order.id})}" th:object="${order}" method="post">
+
+        Date: <input type="date" th:field="*{date}"/><br/>
+        Delivery Status: <input type="text"  th:field="*{deliveryStatus}"/><br/>
+        City: <input type="text" th:field="*{city}"/><br/>
+        <tr>
+            <td colspan="2">
+                <button type="submit">Save</button>
+                <button type="button" onclick="cancelForm1()">Cancel</button>
+            </td>
+        </tr>
+    </form>
+</div>
+<script type="text/javascript">
+    function cancelForm1() {
+        window.location = '/orders';
+    }
+</script>
+</body>
+</html>

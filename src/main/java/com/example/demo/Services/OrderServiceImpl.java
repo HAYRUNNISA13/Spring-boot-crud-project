@@ -12,6 +12,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
+    @Override
+    public void saveOrder(Order order) {
+        orderRepository.save(order);
+    }
 
     @Override
     public List<Order> getAllOrders() {
@@ -24,10 +28,8 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + id));
     }
 
-    @Override
-    public void saveOrder(Order order) {
-        orderRepository.save(order);
-    }
+
+
 
     @Override
     public void updateOrder(Long id, Order order) throws OrderNotFoundException {

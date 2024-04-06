@@ -15,6 +15,10 @@ import java.util.List;
 public class ProductController {
     @Autowired
     private ProductService productService;
+    @GetMapping("/pindex")
+    public String getIndexPage() {
+        return "index";
+    }
 
     @GetMapping("/Product")
     public String showProductList(Model model) {

@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 
 public interface CustomerRepository extends CrudRepository<Customer, Long> {
     public Long countById(Long id);
+    Customer findByName(String name);
 }

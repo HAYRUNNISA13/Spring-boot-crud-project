@@ -10,15 +10,12 @@ import java.util.Optional;
 
 @Service
 public class ProductService {
+
     @Autowired
     private ProductRepository productRepository;
 
     public List<Product> listAll() {
         return (List<Product>) productRepository.findAll();
-    }
-
-    public void save(Product product) {
-        productRepository.save(product);
     }
 
     public Product get(Long id) throws ProductNotFoundException {
@@ -27,6 +24,14 @@ public class ProductService {
             return result.get();
         }
         throw new ProductNotFoundException("Could not find any product with ID " + id);
+    }
+
+    public Product findByName(String name) {
+        return productRepository.findByName(name);
+    }
+
+    public void save(Product product) {
+        productRepository.save(product);
     }
 
     public void updateProduct(Long id, Product product) throws ProductNotFoundException {

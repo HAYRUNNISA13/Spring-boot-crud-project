@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Order List</title>
+
+    <style>
+
+        .action-links {
+            display: inline-block;
+            margin-bottom: 10px;
+            background-color: deepskyblue;
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: black;
+        }
+
+        .action-links:hover{
+            color: darkred;
+        }
+    </style>
+
+</head>
+<body>
+
+<div>
+    <div ><a onclick="gobackhome()">Home</a></div>
+    <h1>Order List</h1>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Customer Name</th>
+            <th>Product Name</th>
+            <th>Date</th>
+            <th>Delivery Status</th>
+            <th>City</th>
+            <th>
+                <div class="action-links">
+                    <a class="h3" th:href="@{/add}">Add customer</a>
+                </div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${orders}">
+            <td th:text="${order.id}"></td>
+            <td>
+                <span th:if="${order.customer != null}" th:text="${order.customer.name}">Customer Name</span>
+                <span th:unless="${order.customer != null}">No Customer</span>
+            </td>
+            <td>
+                <span th:if="${order.product != null}" th:text="${order.product.name}">Product Name</span>
+                <span th:unless="${order.product != null}">No Product</span>
+            </td>
+            <td th:text="${order.date}"></td>
+            <td th:text="${order.deliveryStatus}"></td>
+            <td th:text="${order.city}"></td>
+            <td>
+                <div class="action-links"> <a th:href="@{'/orders/edit/' + ${order.id}}">Edit</a></div>
+                <div class="action-links"><a th:href="@{'/orders/delete/' + ${order.id}}">Delete</a></div>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+    function gobackhome(){
+        window.location='/oindex';
+    }
+
+</script>
+</body>
+</html>

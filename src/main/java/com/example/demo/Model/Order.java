@@ -4,18 +4,20 @@ import jakarta.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Entity
-@Table(name = "Order")
+@Table(name = "Order1")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Temporal(TemporalType.TIMESTAMP)
+
     private Date date;
 
-    private String deliverStatus;
+    private String deliveryStatus;
     private String city;
 
     @ManyToOne
@@ -26,14 +28,14 @@ public class Order {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    // Constructors, getters, and setters
+
     public Order() {
         this.date = new Date();
     }
 
     public Order(Date date, String deliverStatus, String city) {
         this.date = date;
-        this.deliverStatus = deliverStatus;
+        this.deliveryStatus = deliverStatus;
         this.city = city;
     }
 
@@ -53,12 +55,12 @@ public class Order {
         this.date = date;
     }
 
-    public String getDeliverStatus() {
-        return deliverStatus;
+    public String getDeliveryStatus() {
+        return deliveryStatus;
     }
 
-    public void setDeliverStatus(String deliverStatus) {
-        this.deliverStatus = deliverStatus;
+    public void setDeliveryStatus(String deliveryStatus) {
+        this.deliveryStatus = deliveryStatus;
     }
 
     public String getCity() {

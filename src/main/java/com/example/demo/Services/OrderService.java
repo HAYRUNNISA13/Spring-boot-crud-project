@@ -6,10 +6,11 @@ import java.util.List;
 
 public interface OrderService {
     List<Order> getAllOrders();
+    void saveOrder(Order order);
 
     Order getOrderById(Long id) throws OrderNotFoundException;
 
-    void saveOrder(Order order);
+
 
     void updateOrder(Long id, Order order) throws OrderNotFoundException;
 

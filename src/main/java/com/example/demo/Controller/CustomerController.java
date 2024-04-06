@@ -17,10 +17,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class CustomerController {
     @Autowired private CustomerService service;
+    @GetMapping("/index")
+    public String getIndexPage() {
+        return "index";
+    }
     @GetMapping("/Customer")
     public String showCustomerList(Model model)
     {
-        List<Customer> listCustomer =service.listall();
+        List<Customer> listCustomer =service.listAll();
         model.addAttribute("listCustomer" , listCustomer);
         return "Customer/CustomerList";
     }
