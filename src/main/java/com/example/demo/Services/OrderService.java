@@ -1,6 +1,8 @@
 package com.example.demo.Services;
 
 import com.example.demo.Model.Order;
+import  com.example.demo.Model.Product;
+import com.example.demo.Model.Customer;
 
 import java.util.List;
 
@@ -12,7 +14,7 @@ public interface OrderService {
 
 
 
-    void updateOrder(Long id, Order order) throws OrderNotFoundException;
+    void updateOrder(Long id, Order order, Product product, Customer customer) throws OrderNotFoundException;
 
     void deleteOrder(Long id) throws OrderNotFoundException;
 }

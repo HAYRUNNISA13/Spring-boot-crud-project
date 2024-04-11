@@ -15,6 +15,7 @@ import com.example.demo.Services.CustomerService;
 import com.example.demo.Services.OrderService;
 import com.example.demo.Services.ProductService;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import java.util.List;
@@ -48,17 +49,20 @@ public class OrderController {
     @PostMapping("/add")
     public String addOrder(@ModelAttribute("order") Orderview orderview) {
         Order order = new Order();
+        order.setId(orderview.getId());
+
         order.setDate(orderview.getDate());
         order.setDeliveryStatus(orderview.getDeliveryStatus());
         order.setCity(orderview.getCity());
 
-        Product product = productService.findByName(orderview.getPname());
         Customer customer = customerService.findByName1(orderview.getName());
+        Product product = productService.findByName2(orderview.getpname());
 
         order.setProduct(product);
         order.setCustomer(customer);
 
         orderService.saveOrder(order);
+
 
         return "redirect:/orders";
     }
@@ -84,27 +88,31 @@ public class OrderController {
     }*/
 
     @GetMapping("/orders/edit/{id}")
-    public String showEditOrderForm(@PathVariable("id") Long id, Model model) {
+    public String showEditOrderForm(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
         try {
             Order order = orderService.getOrderById(id);
             model.addAttribute("order", order);
-            return "order/orderEdit";
+
         } catch (OrderNotFoundException e) {
+            ra.addFlashAttribute("message", "Product not found :(");
             return "redirect:/orders";
         }
+        return "order/orderEdit";
+
     }
 
     @PostMapping("/orders/update/{id}")
-    public String updateOrder(@PathVariable("id") Long id, @ModelAttribute("order") Order order, BindingResult result) {
+    public String updateOrder(@PathVariable("id") Long id, @ModelAttribute("order") Order order,Product product,Customer customer, BindingResult result, RedirectAttributes ra) {
         if (result.hasErrors()) {
-
-            return "order/orderList" ;
+            return "order/orderList";
         }
 
         try {
-            orderService.updateOrder(id, order);
-        } catch (OrderNotFoundException e) {
+            Order existingOrder = orderService.getOrderById(id);
+            orderService.updateOrder(id, order,product,customer );
+            ra.addFlashAttribute("message", "The order has been updated successfully :)");
 
+        } catch (OrderNotFoundException e) {
             return "redirect:/orders";
         }
 

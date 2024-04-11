@@ -5,15 +5,18 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "Order1")
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+   // @GeneratedValue(strategy = GenerationType.AUTO)
+
     private Long id;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
 
     private Date date;
 

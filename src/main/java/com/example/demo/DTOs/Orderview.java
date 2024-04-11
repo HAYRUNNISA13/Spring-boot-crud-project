@@ -9,7 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Data
 public class Orderview {
-    private int id;
+    private Long id;
     private String name;
     private String pname;
     private String city;
@@ -18,6 +18,9 @@ public class Orderview {
     private Date date;
     private Product product;
     private Customer customer;
+    public Long getId() {
+        return id;
+    }
 
     public Product getProduct() {
         return product;
@@ -40,5 +43,19 @@ public class Orderview {
 
     public void setDeliveryStatus(String deliveryStatus) {
         this.deliveryStatus = deliveryStatus;
+    }
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+    public String getpname() {
+        return pname;
+    }
+
+    public void setProductName(String pname) {
+        this.pname = pname;
     }
 }
