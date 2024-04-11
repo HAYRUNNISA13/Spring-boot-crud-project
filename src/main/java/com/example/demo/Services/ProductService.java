@@ -26,7 +26,7 @@ public class ProductService {
         throw new ProductNotFoundException("Could not find any product with ID " + id);
     }
 
-    public Product findByName(String name) {
+    public Product findByName2(String name) {
         return productRepository.findByName(name);
     }
 

@@ -8,6 +8,9 @@
 <div>
     <h1>Edit Order</h1>
     <form th:action="@{/orders/update/{id}(id=${order.id})}" th:object="${order}" method="post">
+        <input type="hidden" th:field="*{id}" />
+        ProductName: <input type="text" th:field="*{product.name}"/><br/>
+        CustomerName: <input type="text" th:field="*{customer.name}"/><br/>
 
         Date: <input type="date" th:field="*{date}"/><br/>
         Delivery Status: <input type="text"  th:field="*{deliveryStatus}"/><br/>
