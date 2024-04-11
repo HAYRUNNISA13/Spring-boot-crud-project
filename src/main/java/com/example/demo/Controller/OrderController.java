@@ -47,21 +47,27 @@ public class OrderController {
     }
 
     @PostMapping("/add")
-    public String addOrder(@ModelAttribute("order") Orderview orderview) {
-        Order order = new Order();
-        order.setId(orderview.getId());
+    public String addOrder(@ModelAttribute("order") Orderview orderview, RedirectAttributes ra) {
+        try {
+            Order order = new Order();
+            order.setId(orderview.getId());
 
-        order.setDate(orderview.getDate());
-        order.setDeliveryStatus(orderview.getDeliveryStatus());
-        order.setCity(orderview.getCity());
+            order.setDate(orderview.getDate());
+            order.setDeliveryStatus(orderview.getDeliveryStatus());
+            order.setCity(orderview.getCity());
 
-        Customer customer = customerService.findByName1(orderview.getName());
-        Product product = productService.findByName2(orderview.getpname());
+            Customer customer = customerService.findByName1(orderview.getName());
+            Product product = productService.findByName2(orderview.getpname());
 
-        order.setProduct(product);
-        order.setCustomer(customer);
+            order.setProduct(product);
+            order.setCustomer(customer);
 
-        orderService.saveOrder(order);
+            orderService.saveOrder(order);
+            ra.addFlashAttribute("message", "The order successfully added");
+        }
+        catch (Exception e) {
+            ra.addFlashAttribute("error", "Failed to add order: " + e.getMessage());
+        }
 
 
         return "redirect:/orders";
@@ -121,10 +127,12 @@ public class OrderController {
 
 
     @GetMapping("/orders/delete/{id}")
-    public String deleteOrder(@PathVariable("id") Long id) {
+    public String deleteOrder(@PathVariable("id") Long id , RedirectAttributes ra) {
         try {
             orderService.deleteOrder(id);
+            ra.addFlashAttribute("message", "Order deleted successfully");
         } catch (OrderNotFoundException e) {
+            ra.addFlashAttribute("error", "Failed to delete order: " + e.getMessage());
 
         }
         return "redirect:/orders";
