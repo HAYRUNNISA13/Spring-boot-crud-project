@@ -10,14 +10,16 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Data
 public class Orderview {
     private Long id;
-    private String name;
-    private String pname;
+    private String customerName;
+    private String productName;
     private String city;
     private String deliveryStatus;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date date;
     private Product product;
     private Customer customer;
+    private Long productId;
+    private Long customerId;
     public Long getId() {
         return id;
     }
@@ -51,11 +53,21 @@ public class Orderview {
     public void setDate(Date date) {
         this.date = date;
     }
-    public String getpname() {
-        return pname;
+    public String getproductName() {
+        return productName;
     }
 
-    public void setProductName(String pname) {
-        this.pname = pname;
+
+    public void setproductName(String pname) {
+        this.productName = pname;
     }
+    public String getCustomerName()
+    {
+        return customerName;
+    }
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+
 }

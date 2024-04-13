@@ -63,6 +63,7 @@ public class ProductController {
         return "redirect:/Product";
     }
 
+
     @GetMapping("/Product/delete/{id}")
     public String deleteProduct(@PathVariable("id") Long id, RedirectAttributes ra) {
         try {

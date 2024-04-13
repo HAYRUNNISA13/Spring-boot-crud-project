@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Order List</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
 
     <style>
 
@@ -23,9 +24,12 @@
 </head>
 <body>
 
-<div>
+<div align="center">
     <div ><a onclick="gobackhome()">Home</a></div>
     <h1>Order List</h1>
+    <div th:if="${message}" class="alert alert-success" role="alert">
+        <span th:text="${message}"></span>
+    </div>
     <table border="1">
         <thead>
         <tr>
@@ -37,7 +41,7 @@
             <th>City</th>
             <th>
                 <div class="action-links">
-                    <a class="h3" th:href="@{/add}">Add customer</a>
+                    <a class="h3" th:href="@{/add}">Add order</a>
                 </div>
             </th>
         </tr>

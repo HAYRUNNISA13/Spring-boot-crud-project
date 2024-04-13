@@ -1,19 +1,16 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Model.Order;
-import com.example.demo.Services.OrderNotFoundException;
-import com.example.demo.Services.OrderService;
+import com.example.demo.Services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.DTOs.Orderview;
 import com.example.demo.Model.Customer;
-import com.example.demo.Model.Order;
 import com.example.demo.Model.Product;
-import com.example.demo.Services.CustomerService;
-import com.example.demo.Services.OrderService;
-import com.example.demo.Services.ProductService;
+import java.util.Date;
+
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -39,6 +36,52 @@ public class OrderController {
         this.productService = productService;
         this.customerService = customerService;
     }
+    @GetMapping("/Product/porderlist/{id}")
+    public String showPorderListPage(Model model, @PathVariable("id") Long id, RedirectAttributes ra) {
+        try {
+
+            Product product = productService.findById(id);
+            model.addAttribute("order", new Orderview());
+
+            model.addAttribute("product", product);
+
+            model.addAttribute("productName", productService.findProductNameById(id));
+
+            return "Product/porderlist";
+        } catch (ProductNotFoundException e) {
+
+            model.addAttribute("error", "Product not found with id: " + id);
+            return "errorPage";
+        }
+    }
+
+
+    @PostMapping("/order/createp")
+    public String createOrder(@ModelAttribute("order") Orderview orderview, RedirectAttributes ra) {
+        Order order = new Order();
+        order.setId(orderview.getId());
+        order.setDate(orderview.getDate());
+        order.setDeliveryStatus(orderview.getDeliveryStatus());
+        order.setCity(orderview.getCity());
+
+        String productName = orderview.getproductName();
+        String customerName = orderview.getCustomerName();
+
+        Product product = productService.findByName2(productName);
+        Customer customer = customerService.findByName1(customerName);
+
+
+        order.setProduct(product);
+        order.setCustomer(customer);
+
+        orderService.saveOrder(order);
+        ra.addFlashAttribute("message", "The order was successfully added");
+        return "redirect:/orders";
+    }
+
+
+
+
 
     @GetMapping("/add")
     public String showAddOrderForm(Model model) {
@@ -46,8 +89,9 @@ public class OrderController {
         return "order/orderAdd";
     }
 
+
     @PostMapping("/add")
-    public String addOrder(@ModelAttribute("order") Orderview orderview) {
+    public String addOrder(@ModelAttribute("order") Orderview orderview, RedirectAttributes ra) {
         Order order = new Order();
         order.setId(orderview.getId());
 
@@ -55,17 +99,20 @@ public class OrderController {
         order.setDeliveryStatus(orderview.getDeliveryStatus());
         order.setCity(orderview.getCity());
 
-        Customer customer = customerService.findByName1(orderview.getName());
-        Product product = productService.findByName2(orderview.getpname());
+        Customer customer = customerService.findByName1(orderview.getCustomerName());
+        Product product = productService.findByName2(orderview.getproductName());
 
         order.setProduct(product);
         order.setCustomer(customer);
 
         orderService.saveOrder(order);
+        ra.addFlashAttribute("message", "The order was successfully added");
 
 
         return "redirect:/orders";
     }
+
+
 
 
     @GetMapping("/orders")
@@ -118,13 +165,60 @@ public class OrderController {
 
         return "redirect:/orders";
     }
+    @GetMapping("/Customer/corderlist/{id}")
+    public String showCorderListPage(Model model, @PathVariable("id") Long id, RedirectAttributes ra) {
+        try {
+            Customer customer = customerService.findById(id);
+            model.addAttribute("order", new Orderview());
+            model.addAttribute("customer", customer);
+            model.addAttribute("customerName", customerService.findCustomerNameById(id));
+            return "Customer/corderlist";
+        } catch (CustomerNotFoundException e) {
+            ra.addFlashAttribute("error", "Customer not found :(");
+            return "redirect:/orders";
+        }
+    }
+
+
+
+
+    @PostMapping("/order/createc")
+    public String createOrderc(@ModelAttribute("order") Orderview orderview, RedirectAttributes ra) {
+        Order order = new Order();
+        order.setId(orderview.getId());
+        order.setDate(orderview.getDate());
+        order.setDeliveryStatus(orderview.getDeliveryStatus());
+        order.setCity(orderview.getCity());
+
+        String productName = orderview.getproductName();
+        String customerName = orderview.getCustomerName();
+
+        Product product = productService.findByName2(productName);
+        Customer customer = customerService.findByName1(customerName);
+
+
+        order.setProduct(product);
+        order.setCustomer(customer);
+
+        orderService.saveOrder(order);
+        ra.addFlashAttribute("message", "The order was successfully added");
+        return "redirect:/orders";
+    }
+
+
+
+
+
+
 
 
     @GetMapping("/orders/delete/{id}")
-    public String deleteOrder(@PathVariable("id") Long id) {
+    public String deleteOrder(@PathVariable("id") Long id , RedirectAttributes ra) {
         try {
             orderService.deleteOrder(id);
+            ra.addFlashAttribute("message", "Order deleted successfully");
         } catch (OrderNotFoundException e) {
+            ra.addFlashAttribute("error", "Failed to delete order: " + e.getMessage());
 
         }
         return "redirect:/orders";
