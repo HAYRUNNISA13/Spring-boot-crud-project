@@ -11,17 +11,18 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Table(name = "Order1")
 public class Order {
     @Id
-   // @GeneratedValue(strategy = GenerationType.AUTO)
-
     private Long id;
 
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-
     private Date date;
 
     private String deliveryStatus;
     private String city;
+
+
+    private String productName;
+    private String customerName;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
@@ -31,14 +32,13 @@ public class Order {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-
     public Order() {
         this.date = new Date();
     }
 
-    public Order(Date date, String deliverStatus, String city) {
+    public Order(Date date, String deliveryStatus, String city) {
         this.date = date;
-        this.deliveryStatus = deliverStatus;
+        this.deliveryStatus = deliveryStatus;
         this.city = city;
     }
 
@@ -74,6 +74,22 @@ public class Order {
         this.city = city;
     }
 
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
     public Product getProduct() {
         return product;
     }
@@ -89,5 +105,4 @@ public class Order {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
-
 }

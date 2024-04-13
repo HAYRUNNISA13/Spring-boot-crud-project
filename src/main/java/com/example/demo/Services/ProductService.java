@@ -24,10 +24,28 @@ public class ProductService {
             return result.get();
         }
         throw new ProductNotFoundException("Could not find any product with ID " + id);
+
+    }
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
+
+    public Product findById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
     }
 
     public Product findByName2(String name) {
         return productRepository.findByName(name);
+    }
+    public String findProductNameById(Long id) throws ProductNotFoundException {
+        Optional<Product> productOptional = productRepository.findById(id);
+        if (productOptional.isPresent()) {
+            Product product = productOptional.get();
+            return product.getName();
+        } else {
+            throw new ProductNotFoundException("Could not find any product with ID " + id);
+        }
     }
 
     public void save(Product product) {
