@@ -40,7 +40,16 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + id));
     }
+    @Override
+    public Customer findCustomerByName(String customerName) throws CustomerNotFoundException {
+        Optional<Customer> optionalCustomer = Optional.ofNullable(crepo.findByName(customerName));
 
+        if (optionalCustomer.isEmpty()) {
+            throw new CustomerNotFoundException("Customer not found with name: " + customerName);
+        }
+
+        return optionalCustomer.get();
+    }
     @Override
     public void updateOrder(Long id, Order updatedOrder, Product product, Customer customer) throws OrderNotFoundException {
         Optional<Order> optionalOrder = orderRepository.findById(id);

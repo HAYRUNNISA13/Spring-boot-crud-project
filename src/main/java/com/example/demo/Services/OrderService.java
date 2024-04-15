@@ -11,6 +11,8 @@ public interface OrderService {
     void saveOrder(Order order);
 
     Order getOrderById(Long id) throws OrderNotFoundException;
+    Customer findCustomerByName(String customerName) throws CustomerNotFoundException;
+
 
 
 

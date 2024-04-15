@@ -183,18 +183,28 @@ public class OrderController {
 
 
     @PostMapping("/order/createc")
-    public String createOrderc(@ModelAttribute("order") Orderview orderview, RedirectAttributes ra) {
+    public String createOrderc(@ModelAttribute("order") Orderview orderview, RedirectAttributes ra) throws CustomerNotFoundException {
         Order order = new Order();
         order.setId(orderview.getId());
         order.setDate(orderview.getDate());
         order.setDeliveryStatus(orderview.getDeliveryStatus());
         order.setCity(orderview.getCity());
 
+
         String productName = orderview.getproductName();
         String customerName = orderview.getCustomerName();
 
+
         Product product = productService.findByName2(productName);
         Customer customer = customerService.findByName1(customerName);
+        //customer = customerService.findById(customer.getId());
+
+        //Long customerid=customer.getId();
+       // customerName = customerService.findCustomerNameById(customer.getId());
+
+
+
+
 
 
         order.setProduct(product);
