@@ -8,10 +8,14 @@ import com.example.demo.Repository.OrderRepository;
 import com.example.demo.Repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-
+import com.example.demo.DTOs.Orderview;
 import java.util.List;
+import java.util.ArrayList;
+
 import java.util.Optional;
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -22,6 +26,13 @@ public class OrderServiceImpl implements OrderService {
     private CustomerRepository crepo;
     @Autowired
     private ProductRepository productRepository;
+    @Override
+    public List<Order> getAllOrders() {
+        Iterable<Order> orderIterable = orderRepository.findAll();
+        List<Order> orderList = new ArrayList<>();
+        orderIterable.forEach(orderList::add);
+        return orderList;
+    }
 
 
     @Override
@@ -31,42 +42,69 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getAllOrders() {
-        return (List<Order>) orderRepository.findAll();
-    }
+    public Order createOrder(Orderview orderview){
+        Product product = productRepository.findByName(orderview.getProductName());
+        Customer customer = crepo.findByName(orderview.getCustomerName());
+        Order order = new Order();
+        order.setId(orderview.getId());
+        order.setCity(orderview.getCity());
+        order.setDate(orderview.getDate());
+        order.setDeliveryStatus(orderview.getDeliveryStatus());
+        order.setProduct(product);
+        order.setCustomer(customer);
+        return orderRepository.save(order);
 
-    @Override
-    public Order getOrderById(Long id) throws OrderNotFoundException {
-        return orderRepository.findById(id)
-                .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + id));
     }
-    @Override
-    public Customer findCustomerByName(String customerName) throws CustomerNotFoundException {
-        Optional<Customer> optionalCustomer = Optional.ofNullable(crepo.findByName(customerName));
-
-        if (optionalCustomer.isEmpty()) {
-            throw new CustomerNotFoundException("Customer not found with name: " + customerName);
-        }
-
-        return optionalCustomer.get();
-    }
-    @Override
-    public void updateOrder(Long id, Order updatedOrder, Product product, Customer customer) throws OrderNotFoundException {
+    public Order getOrderById(Long id) {
         Optional<Order> optionalOrder = orderRepository.findById(id);
+        if (optionalOrder.isPresent()) {
+            Order order = optionalOrder.get();
+            Orderview orderview = new Orderview();
+            orderview.setId(order.getId());
+            orderview.setCity(order.getCity());
+            orderview.setDate(order.getDate());
+            orderview.setDeliveryStatus(order.getDeliveryStatus());
+            orderview.setProductId(order.getProduct().getId());
+            orderview.setCustomerId(order.getCustomer().getId());
+            return orderRepository.save(order);
+        } else {
+
+            return null;
+        }
+    }
+
+    public void updateOrder(Order order) throws OrderNotFoundException {
+
+        Optional<Order> optionalOrder = orderRepository.findById(order.getId());
+
 
         if (optionalOrder.isPresent()) {
             Order existingOrder = optionalOrder.get();
-            existingOrder.setDate(updatedOrder.getDate());
-            existingOrder.setDeliveryStatus(updatedOrder.getDeliveryStatus());
-            existingOrder.setCity(updatedOrder.getCity());
+            existingOrder.setDeliveryStatus(order.getDeliveryStatus());
+            existingOrder.setCity(order.getCity());
+            existingOrder.setDate(order.getDate());
 
+
+            Product product = null;
+            product = productRepository.findByName(order.getProduct().getName());
+
+
+            Customer customer = null;
+            customer = crepo.findByName(order.getCustomer().getName());
+
+
+            existingOrder.setProduct(product);
+            existingOrder.setCustomer(customer);
 
 
             orderRepository.save(existingOrder);
         } else {
-            throw new OrderNotFoundException("Could not find any order with ID " + id);
+
+            throw new OrderNotFoundException("Order not found with id: " + order.getId());
         }
     }
+
+
 
 
 
