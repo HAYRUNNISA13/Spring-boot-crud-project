@@ -8,32 +8,32 @@
 <div class="container-fluid" align="center">
     <h1>Create New Order</h1>
     <br />
-    <form action="#" th:action="@{/add}" th:object="${order}" method="post">
+    <form action="#" th:action="@{/order/add}"  method="post">
         <table border="0" cellpadding="10">
             <tr>
                 <td>Order ID:</td>
-                <td><input type="text" th:field="*{id}" required /></td>
+                <td><input type="text" name="id"  required /></td>
             </tr>
             <tr>
             <td>Product Name:</td>
-            <td><input type="text" th:field="*{pname}" required/></td>
+            <td><input type="text" name="productName" required/></td>
         </tr>
             <tr>
                 <td>Customer Name:</td>
-                <td><input type="text" th:field="*{name}" required/></td>
+                <td><input type="text" name="customerName" required/></td>
             </tr>
 
             <tr>
                 <td>Delivery Status:</td>
-                <td><input type="text" th:field="*{deliveryStatus}" required/></td>
+                <td><input type="text" name="deliveryStatus"  required/></td>
             </tr>
             <tr>
                 <td>City:</td>
-                <td><input type="text" th:field="*{city}" required/></td>
+                <td><input type="text" name="city"  required/></td>
             </tr>
             <tr>
                 <td>Date:</td>
-                <td><input type="date" th:field="*{date}" required/></td>
+                <td><input type="date" name="date"  required/></td>
             </tr>
             <tr>
                 <td colspan="2">

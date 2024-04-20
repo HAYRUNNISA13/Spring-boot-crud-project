@@ -10,44 +10,39 @@
 <div class="container-fluid" align="center">
     <h1>Create an order</h1>
     <br />
-    <form action="#" th:action="@{/order/createc}" th:object="${order}" method="post">
+    <form action="#" th:action="@{/Customer/createc/{id}(id=${customer.id})}" th:object="${order}" method="post">
 
 
         <table border="0" cellpadding="10">
             <tr style="color: purple">
 
                 <td align="center">
-                    <input type="hidden" name="customerId" th:if="${customer != null}" th:value="${customer.id}" >
-                    <span th:if="${customer != null}" th:text="${customerName}"></span>
-                    <span th:if="${customer == null}">Customer Not Found</span>
+                    <label for="customer">Customer Name:</label>
+                    <input type="hidden" name="customer" th:value="${customer.id}">
+                    <input type="text" id="customer" class="form-control" name="customer" th:value="${customer.name}" readonly>
                 </td>
 
 
             </tr>
-            <tr >
 
-                <td align="center">
-                    <input type="hidden" name="customerId" th:if="${customer != null}" th:value="${customer.id}" >
-
-                </td>
-                <td>
-                    <input type="hidden" th:field="*{customerName}"  required/>
-
-                </td>
-
-
-            </tr>
             <tr>
                 <td>Order ID:</td>
                 <td><input type="text" th:field="*{id}" required /></td>
             </tr>
+
             <tr>
-                <td>
-                    <input type="hidden" name="productId" th:if="${product != null}" th:value="${product.id}" >
-                    Product Name:
-                </td>
-                <td><input type="text" th:field="*{productName}"  required/></td>
+                <label for="products">Select Product:</label>
+                <select id="products" class="form-control" th:field="*{product}">
+
+                <option value="">-- Select Product --</option>
+                    <option th:each="product : ${products}"
+                            th:value="${product.id}"
+                            th:text="${product.name}">product
+                    </option>
+
+                </select>
             </tr>
+
             <tr>
                 <td>Date:</td>
                 <td><input type="date" th:field="*{date}" /></td>

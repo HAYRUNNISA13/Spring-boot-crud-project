@@ -2,45 +2,48 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
-    <title>Create a Order</title>
+    <title>Create an Order</title>
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
 </head>
 
 <body>
 <div class="container-fluid" align="center">
-    <h1>create order</h1>
+    <h1>Create an order</h1>
     <br />
-    <form action="#" th:action="@{/order/createp}" th:object="${order}" method="post">
+    <form action="#" th:action="@{/Product/createp/{id}(id=${product.id})}" th:object="${order}" method="post">
 
 
         <table border="0" cellpadding="10">
-            <tr align="center">
+            <tr style="color: purple">
 
-                <td style="color: purple">
-                    <input type="hidden" name="productId" th:if="${product != null}" th:value="${product.id}" >
-
-                    <span th:if="${product != null}" th:text="${productName}"></span>
-
-                    <span th:if="${product == null}">Product Not Found</span>
-
+                <td align="center">
+                    <label for="product">Product Name:</label>
+                    <input type="hidden" name="product" th:value="${product.id}">
+                    <input type="text" id="product" class="form-control" name="product" th:value="${product.name}" readonly>
                 </td>
 
 
-
-
             </tr>
+
             <tr>
                 <td>Order ID:</td>
                 <td><input type="text" th:field="*{id}" required /></td>
             </tr>
 
             <tr>
-                <input type="hidden" name="customerId" th:if="${customer != null}" th:value="${customer.id}" >
-                <td>Customer Name:</td>
-                <td><input type= "text" th:field="*{customerName}"  required/></td>
-            </tr>
-            <tr>
+                <label for="customer">Select Customer:</label>
+                <select id="customer" class="form-control" th:field="*{customer}">
 
+                    <option value="">-- Select Customer --</option>
+                    <option th:each="customers : ${customer}"
+                            th:value="${customers.id}"
+                            th:text="${customers.name}">product
+                    </option>
+
+                </select>
+            </tr>
+
+            <tr>
                 <td>Date:</td>
                 <td><input type="date" th:field="*{date}" /></td>
             </tr>
@@ -62,9 +65,8 @@
 </div>
 <script type="text/javascript">
     function cancelForm(){
-        window.location='/pindex';
+        window.location='/index';
     }
-
 </script>
 </body>
 </html>

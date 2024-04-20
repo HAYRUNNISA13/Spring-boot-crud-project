@@ -1,6 +1,7 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Model.Product;
+import com.example.demo.Services.ProductAlreadyExistsException;
 import com.example.demo.Services.ProductNotFoundException;
 import com.example.demo.Services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,15 @@ public class ProductController {
     }
 
     @PostMapping("/Product/save")
-    public String saveProduct(@ModelAttribute Product product, RedirectAttributes ra) {
-        productService.save(product);
-        ra.addFlashAttribute("message", "The product has been saved successfully :)");
+    public String saveProduct(@ModelAttribute Product product, RedirectAttributes ra) throws ProductAlreadyExistsException {
+       try {
+           productService.save(product);
+           ra.addFlashAttribute("message", "The product has been saved successfully :)");
+
+       }catch (ProductAlreadyExistsException e)
+       {
+          ra.addFlashAttribute("message",e.getMessage());
+       }
         return "redirect:/Product";
     }
 

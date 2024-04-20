@@ -8,5 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OrderRepository extends CrudRepository<Order, Long> {
     Long countById(Long id);
+
+    Order getById(int id);
 }
 

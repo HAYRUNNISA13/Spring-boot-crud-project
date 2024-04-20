@@ -16,7 +16,7 @@ public class Product {
     private String supplier;
     private Long price;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<Order> orders = new HashSet<>();
 
     public Product() {
@@ -67,4 +67,6 @@ public class Product {
     public void setOrders(Set<Order> orders) {
         this.orders = orders;
     }
+
+
 }
