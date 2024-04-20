@@ -1,5 +1,6 @@
 package com.example.demo.Services;
 
+import com.example.demo.Controller.OrderAlreadyExistsException;
 import com.example.demo.Model.Customer;
 import com.example.demo.Model.Order;
 import com.example.demo.Model.Product;
@@ -36,13 +37,21 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public void saveOrder(Order order) {
+    public void saveOrder(Order order) throws OrderAlreadyExistsException {
+        Long count = orderRepository.countById(order.getId());
+        if (count != null && count > 0) {
+            throw new OrderAlreadyExistsException("An order with ID " + order.getId() + " already exists.");
+        }
         orderRepository.save(order);
 
     }
 
     @Override
-    public Order createOrder(Orderview orderview){
+    public Order createOrder(Orderview orderview) throws OrderAlreadyExistsException{
+        Long count = orderRepository.countById(orderview.getId());
+        if (count != null && count > 0) {
+            throw new OrderAlreadyExistsException("An order with ID " + orderview.getId() + " already exists.");
+        }
         Product product = productRepository.findByName(orderview.getProductName());
         Customer customer = crepo.findByName(orderview.getCustomerName());
         Order order = new Order();

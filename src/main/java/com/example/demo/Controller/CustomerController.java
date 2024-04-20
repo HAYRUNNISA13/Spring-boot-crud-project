@@ -1,6 +1,7 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Model.Customer;
+import com.example.demo.Services.CustomerAlreadyExistsException;
 import com.example.demo.Services.CustomerNotFoundException;
 import com.example.demo.Services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,13 @@ public class CustomerController {
         return "Customer/CustomerList";
     }
     @PostMapping("/Customer/save")
-    public String saveCustomer(@ModelAttribute Customer customer, RedirectAttributes ra) {
-        service.save(customer);
-        ra.addFlashAttribute("message", "The customer has been saved successfully :)");
+    public String saveCustomer(@ModelAttribute Customer customer, RedirectAttributes ra) throws CustomerAlreadyExistsException {
+        try {
+            service.save(customer);
+            ra.addFlashAttribute("message", "The customer has been saved successfully :)");
+        } catch (CustomerAlreadyExistsException e) {
+            ra.addFlashAttribute("errorMessage", e.getMessage());
+        }
         return "redirect:/Customer";
     }
 

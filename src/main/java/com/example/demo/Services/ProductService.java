@@ -48,7 +48,11 @@ public class ProductService {
         }
     }
 
-    public void save(Product product) {
+    public void save(Product product) throws ProductAlreadyExistsException{
+        Long count = productRepository.countById(product.getId());
+        if (count != null && count > 0) {
+            throw new ProductAlreadyExistsException("A product with ID " + product.getId() + " already exists.");
+        }
         productRepository.save(product);
     }
 

@@ -22,7 +22,11 @@ public class CustomerService {
         return crepo.findByName(name);
     }
 
-    public void save(Customer customer) {
+    public void save(Customer customer) throws CustomerAlreadyExistsException {
+        Long count = crepo.countById(customer.getId());
+        if (count != null && count > 0) {
+            throw new CustomerAlreadyExistsException("A customer with ID " + customer.getId() + " already exists.");
+        }
         crepo.save(customer);
     }
 

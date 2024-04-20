@@ -71,7 +71,7 @@ public class OrderController {
 
 
     @PostMapping("/Product/createp/{id}")
-    public String createOrder(Order order, RedirectAttributes ra) {
+    public String createOrder(Order order, RedirectAttributes ra)throws ProductNotFoundException {
 
         order.setId(order.getId());
         order.setDate(order.getDate());
@@ -79,11 +79,12 @@ public class OrderController {
         order.setCity(order.getCity());
         order.setCustomer(order.getCustomer());
         order.setProduct(order.getProduct());
-
-
-
-        orderService.saveOrder(order);
-        ra.addFlashAttribute("message", "The order was successfully added");
+        try {
+            orderService.saveOrder(order);
+            ra.addFlashAttribute("message", "The order was successfully added");
+        } catch (OrderAlreadyExistsException e) {
+            ra.addFlashAttribute("errorMessage", e.getMessage());
+        }
         return "redirect:/orders";
     }
 
@@ -95,8 +96,12 @@ public class OrderController {
     @PostMapping("/order/add")
     public String addOrder(Orderview orderv, RedirectAttributes ra)
     {
-        orderService.createOrder(orderv);
-        ra.addFlashAttribute("message", "The order was successfully added");
+        try {
+            orderService.createOrder(orderv);
+            ra.addFlashAttribute("message", "The order was successfully added");
+        } catch (OrderAlreadyExistsException e) {
+            ra.addFlashAttribute("errorMessage", e.getMessage());
+        }
         return "redirect:/orders";
     };
 
@@ -155,11 +160,13 @@ public class OrderController {
         order.setCity(order.getCity());
         order.setCustomer(order.getCustomer());
         order.setProduct(order.getProduct());
+        try {
+            orderService.saveOrder(order);
+            ra.addFlashAttribute("message", "The order was successfully added");
+        } catch (OrderAlreadyExistsException e) {
+            ra.addFlashAttribute("errorMessage", e.getMessage());
+        }
 
-
-
-        orderService.saveOrder(order);
-        ra.addFlashAttribute("message", "The order was successfully added");
         return "redirect:/orders";
     }
 

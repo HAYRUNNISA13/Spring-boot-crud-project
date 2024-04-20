@@ -1,5 +1,6 @@
 package com.example.demo.Services;
 
+import com.example.demo.Controller.OrderAlreadyExistsException;
 import com.example.demo.DTOs.Orderview;
 import  com.example.demo.Model.Product;
 import  com.example.demo.Model.Order;
@@ -11,9 +12,9 @@ import java.util.Optional;
 public interface OrderService {
 
     List<Order> getAllOrders();
-    void saveOrder(Order order);
+    void saveOrder(Order order)throws OrderAlreadyExistsException;
 
-    Order createOrder(Orderview orderview);
+    Order createOrder(Orderview orderview)throws OrderAlreadyExistsException;
     Order getOrderById(Long id) throws OrderNotFoundException;
    // Customer findCustomerByName(String customerName) throws CustomerNotFoundException;
    // Product findProductByName(String productName)throws ProductNotFoundException;
