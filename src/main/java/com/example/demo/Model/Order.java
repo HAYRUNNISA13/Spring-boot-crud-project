@@ -19,6 +19,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Table(name = "Order1")
 public class Order {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Temporal(TemporalType.TIMESTAMP)
