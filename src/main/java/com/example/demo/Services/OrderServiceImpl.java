@@ -39,21 +39,34 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void saveOrder(Order order) throws OrderAlreadyExistsException {
         Long count = orderRepository.countById(order.getId());
+
+
+
         if (count != null && count > 0) {
             throw new OrderAlreadyExistsException("An order with ID " + order.getId() + " already exists.");
         }
         orderRepository.save(order);
-
     }
 
+
+
     @Override
-    public Order createOrder(Orderview orderview) throws OrderAlreadyExistsException{
+    public Order createOrder(Orderview orderview) throws OrderAlreadyExistsException, CustomerNotFoundException, ProductNotFoundException {
         Long count = orderRepository.countById(orderview.getId());
         if (count != null && count > 0) {
             throw new OrderAlreadyExistsException("An order with ID " + orderview.getId() + " already exists.");
         }
-        Product product = productRepository.findByName(orderview.getProductName());
+
         Customer customer = crepo.findByName(orderview.getCustomerName());
+        if (customer == null) {
+            throw new CustomerNotFoundException("Customer not found with name: " + orderview.getCustomerName());
+        }
+
+        Product product = productRepository.findByName(orderview.getProductName());
+        if (product == null) {
+            throw new ProductNotFoundException("Product not found with name: " + orderview.getProductName());
+        }
+
         Order order = new Order();
         order.setId(orderview.getId());
         order.setCity(orderview.getCity());
@@ -61,9 +74,15 @@ public class OrderServiceImpl implements OrderService {
         order.setDeliveryStatus(orderview.getDeliveryStatus());
         order.setProduct(product);
         order.setCustomer(customer);
-        return orderRepository.save(order);
 
+        if (customer != null && product != null) {
+            return orderRepository.save(order);
+        } else {
+
+            return null;
+        }
     }
+
     public Order getOrderById(Long id) {
         Optional<Order> optionalOrder = orderRepository.findById(id);
         if (optionalOrder.isPresent()) {
