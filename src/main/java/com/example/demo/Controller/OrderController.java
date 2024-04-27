@@ -132,8 +132,13 @@ public class OrderController {
 
     @PostMapping("/order/update/{id}")
     public String updateOrder(Order orderv, RedirectAttributes ra) throws OrderNotFoundException {
-        orderService.updateOrder(orderv);
-        ra.addFlashAttribute("message", "The order was successfully updated");
+        try {
+            orderService.updateOrder(orderv);
+            ra.addFlashAttribute("message", "The order was successfully updated");
+        }catch (CustomerNotFoundException |ProductNotFoundException e)
+        {
+            ra.addFlashAttribute("errorMessage", e.getMessage());
+        }
         return "redirect:/orders";
     }
 

@@ -22,7 +22,7 @@ public interface OrderService {
 
 
 
-    void updateOrder(Order order) throws OrderNotFoundException;
+    void updateOrder(Order order) throws OrderNotFoundException, CustomerNotFoundException,ProductNotFoundException;
 
     void deleteOrder(Long id) throws OrderNotFoundException;
 }

@@ -101,7 +101,7 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    public void updateOrder(Order order) throws OrderNotFoundException {
+    public void updateOrder(Order order) throws OrderNotFoundException, CustomerNotFoundException,ProductNotFoundException{
 
         Optional<Order> optionalOrder = orderRepository.findById(order.getId());
 
@@ -116,9 +116,16 @@ public class OrderServiceImpl implements OrderService {
             Product product = null;
             product = productRepository.findByName(order.getProduct().getName());
 
+            if (product == null) {
+                throw new ProductNotFoundException("Product not found with name: " + order.getProduct().getName());
+            }
+
 
             Customer customer = null;
             customer = crepo.findByName(order.getCustomer().getName());
+            if (customer == null) {
+                throw new CustomerNotFoundException("Customer not found with name: " + order.getCustomer().getName());
+            }
 
 
             existingOrder.setProduct(product);
