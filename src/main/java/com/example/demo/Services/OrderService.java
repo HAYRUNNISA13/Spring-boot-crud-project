@@ -12,9 +12,9 @@ import java.util.Optional;
 public interface OrderService {
 
     List<Order> getAllOrders();
-    void saveOrder(Order order)throws OrderAlreadyExistsException;
+    void saveOrder(Order order)throws OrderAlreadyExistsException, CustomerNotFoundException, ProductNotFoundException;
 
-    Order createOrder(Orderview orderview)throws OrderAlreadyExistsException;
+    Order createOrder(Orderview orderview)throws OrderAlreadyExistsException, CustomerNotFoundException, ProductNotFoundException;
     Order getOrderById(Long id) throws OrderNotFoundException;
    // Customer findCustomerByName(String customerName) throws CustomerNotFoundException;
    // Product findProductByName(String productName)throws ProductNotFoundException;
@@ -22,7 +22,7 @@ public interface OrderService {
 
 
 
-    void updateOrder(Order order) throws OrderNotFoundException;
+    void updateOrder(Order order) throws OrderNotFoundException, CustomerNotFoundException,ProductNotFoundException;
 
     void deleteOrder(Long id) throws OrderNotFoundException;
 }

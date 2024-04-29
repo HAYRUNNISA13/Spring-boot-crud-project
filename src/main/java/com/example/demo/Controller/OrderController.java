@@ -84,6 +84,8 @@ public class OrderController {
             ra.addFlashAttribute("message", "The order was successfully added");
         } catch (OrderAlreadyExistsException e) {
             ra.addFlashAttribute("errorMessage", e.getMessage());
+        } catch (CustomerNotFoundException e) {
+            throw new RuntimeException(e);
         }
         return "redirect:/orders";
     }
@@ -94,16 +96,19 @@ public class OrderController {
         return "order/orderAdd";
     }
     @PostMapping("/order/add")
-    public String addOrder(Orderview orderv, RedirectAttributes ra)
-    {
+    public String addOrder(Orderview orderv, RedirectAttributes ra) {
         try {
             orderService.createOrder(orderv);
             ra.addFlashAttribute("message", "The order was successfully added");
         } catch (OrderAlreadyExistsException e) {
             ra.addFlashAttribute("errorMessage", e.getMessage());
+        } catch (CustomerNotFoundException | ProductNotFoundException e) {
+            ra.addFlashAttribute("errorMessage", e.getMessage());
         }
         return "redirect:/orders";
-    };
+    }
+
+
 
 
 
@@ -127,8 +132,13 @@ public class OrderController {
 
     @PostMapping("/order/update/{id}")
     public String updateOrder(Order orderv, RedirectAttributes ra) throws OrderNotFoundException {
-        orderService.updateOrder(orderv);
-        ra.addFlashAttribute("message", "The order was successfully updated");
+        try {
+            orderService.updateOrder(orderv);
+            ra.addFlashAttribute("message", "The order was successfully updated");
+        }catch (CustomerNotFoundException |ProductNotFoundException e)
+        {
+            ra.addFlashAttribute("errorMessage", e.getMessage());
+        }
         return "redirect:/orders";
     }
 
@@ -165,6 +175,8 @@ public class OrderController {
             ra.addFlashAttribute("message", "The order was successfully added");
         } catch (OrderAlreadyExistsException e) {
             ra.addFlashAttribute("errorMessage", e.getMessage());
+        } catch (ProductNotFoundException e) {
+            throw new RuntimeException(e);
         }
 
         return "redirect:/orders";
